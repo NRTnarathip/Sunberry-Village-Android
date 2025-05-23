@@ -16,23 +16,23 @@ namespace SunberryVillage.Utilities;
 
 internal class EventHookManager
 {
-	internal static void InitializeEventHooks()
-	{
-		IntegrationManager.AddEventHooks();
-		PhoneManager.AddEventHooks();
-		TarotManager.AddEventHooks();
-		AnimationsManager.AddEventHooks();
-		AudioManager.AddEventHooks();
-		LightingManager.AddEventHooks();
-		EmojiManager.AddEventHooks();
-		MapManager.AddEventHooks();
-		QueryManager.AddEventHooks();
-		EventCommandManager.AddEventHooks();
-		MarketDailySpecialManager.AddEventHooks();
-		SunberrySpecialOrdersBoard.AddEventHooks();
-		ImageMenuManager.AddEventHooks();
-		PipPepShopNotification.AddEventHooks();
-		StringPoolManager.AddEventHooks();
-		MenuHooks.AddEventHooks();
-	}
+    internal static void InitializeEventHooks()
+    {
+        IntegrationManager.AddEventHooks();
+        PhoneManager.AddEventHooks();
+        TarotManager.AddEventHooks();
+        AnimationsManager.AddEventHooks();
+        AudioManager.AddEventHooks();
+        LightingManager.AddEventHooks();
+        EmojiManager.AddEventHooks();
+        MapManager.AddEventHooks();
+        QueryManager.AddEventHooks();
+        EventCommandManager.AddEventHooks();
+        MarketDailySpecialManager.AddEventHooks();
+        SunberrySpecialOrdersBoard.AddEventHooks();
+        ImageMenuManager.AddEventHooks();
+        PipPepShopNotification.AddEventHooks();
+        StringPoolManager.AddEventHooks();
+        MenuHooks.AddEventHooks();
+    }
 }

@@ -1,67 +1,75 @@
 ﻿<!-- ReSharper disable UnknownProperty -->
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>SunberryVillage</AssemblyName>
-    <RootNamespace>SunberryVillage</RootNamespace>
-    <Version>1.0.3</Version>
-    <GameModsPath>$(GamePath)\Mods\Sunberry Village</GameModsPath>
-    <ModFolderName>[C#] Sunberry Village</ModFolderName>
-    <TargetFramework>net6.0</TargetFramework>
-    <EnableHarmony>true</EnableHarmony>
-    <LangVersion>preview</LangVersion>
-    <EnableModZip>false</EnableModZip>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>SunberryVillage</AssemblyName>
+		<RootNamespace>SunberryVillage</RootNamespace>
+		<Version>1.0.3</Version>
+		<GameModsPath>$(GamePath)\Mods\Sunberry Village</GameModsPath>
+		<ModFolderName>[C#] Sunberry Village</ModFolderName>
+		<TargetFramework>net6.0</TargetFramework>
+		<EnableHarmony>true</EnableHarmony>
+		<LangVersion>preview</LangVersion>
+		<EnableModZip>false</EnableModZip>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
-    
-    <Using Include="SunberryVillage.Utilities" />
-  </ItemGroup>
-  
-  <!-- GamePath isn't defined right away so we need to redefine GameModsPath once it is. -->
-  <Target Name="FixModPath" BeforeTargets="AfterBuild">
-    <Message Text="Mod Path Before Fix: $(GameModsPath)" />
-      
-    <PropertyGroup>
-      <GameModsPath>$(GamePath)\Mods\Sunberry Village</GameModsPath>
-    </PropertyGroup>
-  
-    <Message Text="Mod Path After Fix: $(GameModsPath)" />
-  </Target>
-    
-  <Target Name="Deploy" AfterTargets="AfterBuild">
-    <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
+
+		<Using Include="SunberryVillage.Utilities" />
+	</ItemGroup>
+
+	<!-- GamePath isn't defined right away so we need to redefine GameModsPath once it is. -->
+	<Target Name="FixModPath" BeforeTargets="AfterBuild">
+		<Message Text="Mod Path Before Fix: $(GameModsPath)" />
+
+		<PropertyGroup>
+			<GameModsPath>$(GamePath)\Mods\Sunberry Village</GameModsPath>
+		</PropertyGroup>
+
+		<Message Text="Mod Path After Fix: $(GameModsPath)" />
+	</Target>
+
+	<Target Name="Deploy" AfterTargets="AfterBuild">
+		<ItemGroup>
 			<_SourceFiles Include="$(ProjectDir)*Sunberry Village\**\*.*;" />
-    </ItemGroup>
-    
-    <PropertyGroup>
-      <_OutputFolder>$(GamePath)\Mods\Sunberry Village</_OutputFolder>
-      <_ZipTo>$(ProjectDir)zips</_ZipTo>
-    </PropertyGroup>
-    
-    <!--<Message Text="Source Files: @(_SourceFiles)" />-->
-    <Message Text="Output Folder: $(_OutputFolder)" />
-    <Message Text="Game Path: $(GamePath)" />
-    <Message Text="Game Mods Path: $(GameModsPath)" />
-    
+		</ItemGroup>
+
+		<PropertyGroup>
+			<_OutputFolder>$(GamePath)\Mods\Sunberry Village</_OutputFolder>
+			<_ZipTo>$(ProjectDir)zips</_ZipTo>
+		</PropertyGroup>
+
+		<!--<Message Text="Source Files: @(_SourceFiles)" />-->
+		<Message Text="Output Folder: $(_OutputFolder)" />
+		<Message Text="Game Path: $(GamePath)" />
+		<Message Text="Game Mods Path: $(GameModsPath)" />
+
 		<Copy SourceFiles="@(_SourceFiles)" DestinationFolder="$(_OutputFolder)\%(RecursiveDir)" SkipUnchangedFiles="true" />
 
-    <!-- ZipDirectory doesn't capture the parent directory so we need to make a temp dir to deploy the zip file from-->
-    <ItemGroup>
-      <_ZipFiles Include="$(_OutputFolder)\**\*.*;" />
-    </ItemGroup>
+		<!-- ZipDirectory doesn't capture the parent directory so we need to make a temp dir to deploy the zip file from-->
+		<ItemGroup>
+			<_ZipFiles Include="$(_OutputFolder)\**\*.*;" />
+		</ItemGroup>
 
-    <Copy SourceFiles="@(_ZipFiles)" DestinationFolder="$(ProjectDir)\Sunberry Village\Sunberry Village\%(RecursiveDir)" SkipUnchangedFiles="true" />
-    
-    <MakeDir Directories="$(_ZipTo)" Condition="!Exists('$(_ZipTo)')" />
-    <!-- ReSharper disable once UnknownTask -->
-    <ZipDirectory SourceDirectory="$(ProjectDir)\Sunberry Village" DestinationFile="$(_ZipTo)\Sunberry Village $(Version).zip" Overwrite="true" />
+		<Copy SourceFiles="@(_ZipFiles)" DestinationFolder="$(ProjectDir)\Sunberry Village\Sunberry Village\%(RecursiveDir)" SkipUnchangedFiles="true" />
 
-    <!-- And now get rid of our temp dir-->
-    <RemoveDir Directories="$(ProjectDir)\Sunberry Village" />
+		<MakeDir Directories="$(_ZipTo)" Condition="!Exists('$(_ZipTo)')" />
+		<!-- ReSharper disable once UnknownTask -->
+		<ZipDirectory SourceDirectory="$(ProjectDir)\Sunberry Village" DestinationFile="$(_ZipTo)\Sunberry Village $(Version).zip" Overwrite="true" />
+
+		<!-- And now get rid of our temp dir-->
+		<RemoveDir Directories="$(ProjectDir)\Sunberry Village" />
 	</Target>
-    
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
-  
+
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties />
+		</VisualStudio>
+	</ProjectExtensions>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cmd /c &quot;call \&quot;$(ProjectDir)post-build.cmd\&quot; || exit /b 0&quot;" />
+	</Target>
+
 </Project>
 <!-- ReSharper restore UnknownProperty -->
